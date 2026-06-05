@@ -272,6 +272,13 @@ async function sendToGemini(userMsg) {
   ];
 
   const body = {
+      const fullContents = [
+    { role: 'user',  parts: [{ text: SYSTEM_PROMPT }] },
+    { role: 'model', parts: [{ text: 'Entendido. Estou pronto.' }] },
+    ...contents,
+  ];
+
+  const body = {
     contents: fullContents,
     generationConfig: {
       temperature: 0.8,
@@ -280,8 +287,6 @@ async function sendToGemini(userMsg) {
   };
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${CFG.GEMINI_KEY}`;
-
-  if (!resp.ok) {
     const err = await resp.json().catch(() => ({}));
     const msg = err?.error?.message || `Erro HTTP ${resp.status}`;
     throw new Error(msg);
