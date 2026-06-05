@@ -273,7 +273,7 @@ async function sendToGemini(userMsg) {
   contents.push({ role: 'user', parts: [{ text: userMsg }] });
 
   const body = {
-    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
     contents,
     generationConfig: {
       temperature: 0.8,
@@ -281,7 +281,7 @@ async function sendToGemini(userMsg) {
     }
   };
 
-  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${CFG.GEMINI_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${CFG.GEMINI_KEY}`;
 
   const resp = await fetch(url, {
     method: 'POST',
