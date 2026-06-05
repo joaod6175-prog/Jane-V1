@@ -263,16 +263,15 @@ async function sendToGemini(userMsg) {
     return 'Chave Gemini não configurada. Acesse as **configurações** (⚙) e insira sua chave API.';
   }
 
-  // Build conversation history (last 10 turns)
   const recentHistory = STATE.messages.slice(-10);
-    const fullContents = [
-    { role: 'user',  parts: [{ text: SYSTEM_PROMPT }] },
-    { role: 'model', parts: [{ text: 'Entendido. Estou pronto.' }] },
-    ...contents,
-  ];
+  const contents = [];
 
-  const body = {
-      const fullContents = [
+  recentHistory.forEach(m => {
+    contents.push({ role: m.role === 'jarvis' ? 'model' : 'user', parts: [{ text: m.text }] });
+  });
+  contents.push({ role: 'user', parts: [{ text: userMsg }] });
+
+  const fullContents = [
     { role: 'user',  parts: [{ text: SYSTEM_PROMPT }] },
     { role: 'model', parts: [{ text: 'Entendido. Estou pronto.' }] },
     ...contents,
@@ -280,16 +279,20 @@ async function sendToGemini(userMsg) {
 
   const body = {
     contents: fullContents,
-    generationConfig: {
-      temperature: 0.8,
-      maxOutputTokens: 1024,
-    }
+    generationConfig: { temperature: 0.8, maxOutputTokens: 1024 }
   };
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${CFG.GEMINI_KEY}`;
+
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  if (!resp.ok) {
     const err = await resp.json().catch(() => ({}));
-    const msg = err?.error?.message || `Erro HTTP ${resp.status}`;
-    throw new Error(msg);
+    throw new Error(err?.error?.message || `Erro HTTP ${resp.status}`);
   }
 
   const data = await resp.json();
@@ -297,8 +300,6 @@ async function sendToGemini(userMsg) {
   if (!text) throw new Error('Resposta vazia da API.');
   return text;
 }
-
-async function handleSend() {
   const raw = DOM.userInput.value.trim();
   if (!raw) return;
 
