@@ -265,29 +265,21 @@ async function sendToGemini(userMsg) {
 
   // Build conversation history (last 10 turns)
   const recentHistory = STATE.messages.slice(-10);
-  const contents = [];
-
-  recentHistory.forEach(m => {
-    contents.push({ role: m.role === 'jarvis' ? 'model' : 'user', parts: [{ text: m.text }] });
-  });
-  contents.push({ role: 'user', parts: [{ text: userMsg }] });
+    const fullContents = [
+    { role: 'user',  parts: [{ text: SYSTEM_PROMPT }] },
+    { role: 'model', parts: [{ text: 'Entendido. Estou pronto.' }] },
+    ...contents,
+  ];
 
   const body = {
-    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-    contents,
+    contents: fullContents,
     generationConfig: {
       temperature: 0.8,
       maxOutputTokens: 1024,
     }
   };
 
-  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${CFG.GEMINI_KEY}`;
-
-  const resp = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${CFG.GEMINI_KEY}`;
 
   if (!resp.ok) {
     const err = await resp.json().catch(() => ({}));
