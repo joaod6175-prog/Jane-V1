@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#000d1a" />
+  <meta name="description" content="JARVIS Mobile AI — Seu assistente de inteligência artificial pessoal" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="JARVIS" />
+  <title>JARVIS — Mobile AI</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icon.png" />
+  <link rel="apple-touch-icon" href="assets/icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient background layers -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="scan-line"></div>
+
+  <!-- Boot screen -->
+  <div id="boot-screen">
+    <div class="boot-logo">
+      <div class="boot-ring boot-ring-1"></div>
+      <div class="boot-ring boot-ring-2"></div>
+      <div class="boot-ring boot-ring-3"></div>
+      <div class="boot-core">J</div>
+    </div>
+    <div class="boot-text">
+      <span class="boot-title">JARVIS</span>
+      <span class="boot-subtitle">JUST A RATHER VERY INTELLIGENT SYSTEM</span>
+      <div class="boot-progress-wrap">
+        <div class="boot-progress-bar" id="boot-bar"></div>
+      </div>
+      <span class="boot-status" id="boot-status">Inicializando sistemas...</span>
+    </div>
+  </div>
+
+  <!-- Main app -->
+  <div id="app" class="hidden">
+
+    <!-- Header -->
+    <header class="hud-header">
+      <div class="header-left">
+        <div class="status-dot pulse-dot"></div>
+        <span class="header-brand">JARVIS <span class="brand-sub">AI</span></span>
+      </div>
+      <div class="header-center">
+        <div class="header-time" id="header-time">--:--:--</div>
+      </div>
+      <div class="header-right">
+        <button class="hud-btn icon-btn" id="btn-memory" title="Memórias">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+        </button>
+        <button class="hud-btn icon-btn" id="btn-settings" title="Configurações">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Arc reactor / status ring -->
+    <div class="arc-container">
+      <div class="arc-outer-ring"></div>
+      <div class="arc-middle-ring"></div>
+      <div class="arc-inner-ring"></div>
+      <div class="arc-core">
+        <div class="arc-pulse"></div>
+        <span class="arc-label">ONLINE</span>
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-label">STATUS</span>
+        <span class="stat-value green" id="stat-status">ATIVO</span>
+      </div>
+      <div class="stat-sep">|</div>
+      <div class="stat-item">
+        <span class="stat-label">MSGS</span>
+        <span class="stat-value" id="stat-msgs">0</span>
+      </div>
+      <div class="stat-sep">|</div>
+      <div class="stat-item">
+        <span class="stat-label">MEM</span>
+        <span class="stat-value" id="stat-mem">0</span>
+      </div>
+      <div class="stat-sep">|</div>
+      <div class="stat-item">
+        <span class="stat-label">MODELO</span>
+        <span class="stat-value cyan">GEMINI</span>
+      </div>
+    </div>
+
+    <!-- Chat container -->
+    <main class="chat-container" id="chat-container">
+      <div class="chat-messages" id="chat-messages">
+        <!-- Welcome message injected by JS -->
+      </div>
+    </main>
+
+    <!-- Input area -->
+    <footer class="input-area">
+      <div class="input-wrapper">
+        <div class="input-panel">
+          <textarea
+            id="user-input"
+            class="chat-input"
+            placeholder="Digite sua mensagem para JARVIS..."
+            rows="1"
+            maxlength="2000"
+          ></textarea>
+          <div class="input-actions">
+            <button class="hud-btn mic-btn" id="btn-mic" title="Voz">
+              <svg id="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+                <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/>
+              </svg>
+            </button>
+            <button class="hud-btn send-btn" id="btn-send" title="Enviar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="voice-status" id="voice-status">
+          <span class="voice-wave"></span>
+          <span class="voice-wave"></span>
+          <span class="voice-wave"></span>
+          <span id="voice-text">Ouvindo...</span>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /#app -->
+
+  <!-- Memory Modal -->
+  <div class="modal-overlay hidden" id="modal-memory">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">BANCO DE MEMÓRIAS</span>
+        <button class="hud-btn icon-btn modal-close" data-modal="modal-memory">✕</button>
+      </div>
+      <div class="modal-body" id="memory-list">
+        <p class="empty-state">Nenhuma memória salva ainda.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="hud-btn danger-btn" id="btn-clear-memories">LIMPAR TUDO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay hidden" id="modal-settings">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">CONFIGURAÇÕES</span>
+        <button class="hud-btn icon-btn modal-close" data-modal="modal-settings">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-group">
+          <label class="setting-label">GEMINI API KEY</label>
+          <input type="password" class="setting-input" id="input-gemini-key" placeholder="AIza..." />
+          <span class="setting-hint">Obtenha em aistudio.google.com</span>
+        </div>
+        <div class="settings-group">
+          <label class="setting-label">SUPABASE URL</label>
+          <input type="text" class="setting-input" id="input-sb-url" placeholder="https://xxx.supabase.co" />
+        </div>
+        <div class="settings-group">
+          <label class="setting-label">SUPABASE ANON KEY</label>
+          <input type="password" class="setting-input" id="input-sb-key" placeholder="eyJ..." />
+          <span class="setting-hint">Encontrado em Project Settings → API</span>
+        </div>
+        <div class="settings-group">
+          <label class="setting-label">NOME DO USUÁRIO</label>
+          <input type="text" class="setting-input" id="input-username" placeholder="Tony Stark" />
+        </div>
+        <div class="settings-group">
+          <label class="setting-label">VOZ DO JARVIS</label>
+          <select class="setting-input" id="select-voice">
+            <option value="">Padrão do sistema</option>
+          </select>
+        </div>
+        <div class="settings-group toggle-group">
+          <label class="setting-label">RESPOSTA EM VOZ</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-tts" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="hud-btn primary-btn" id="btn-save-settings">SALVAR CONFIGURAÇÕES</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- Install PWA banner -->
+  <div class="install-banner hidden" id="install-banner">
+    <span>📱 Instalar JARVIS no dispositivo</span>
+    <button class="hud-btn small-btn" id="btn-install">INSTALAR</button>
+    <button class="hud-btn icon-btn" id="btn-dismiss-install">✕</button>
+  </div>
+
+  <script src="config.js" onerror="console.warn('config.js não encontrado — use as configurações no painel.')"></script>
+  <script src="script.js"></script>
+</body>
+</html>

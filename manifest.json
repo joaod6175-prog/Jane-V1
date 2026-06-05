@@ -1,0 +1,38 @@
+{
+  "name": "JARVIS Mobile AI",
+  "short_name": "JARVIS",
+  "description": "Assistente de IA pessoal estilo Iron Man — powered by Gemini",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#000d1a",
+  "theme_color": "#000d1a",
+  "lang": "pt-BR",
+  "scope": "./",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "assets/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Novo Chat",
+      "short_name": "Chat",
+      "description": "Iniciar nova conversa",
+      "url": "./index.html",
+      "icons": [{ "src": "assets/icon.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}
