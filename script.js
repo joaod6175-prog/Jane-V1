@@ -273,7 +273,7 @@ async function sendToGemini(userMsg) {
   contents.push({ role: 'user', parts: [{ text: userMsg }] });
 
   const body = {
-    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
     contents,
     generationConfig: {
       temperature: 0.8,
