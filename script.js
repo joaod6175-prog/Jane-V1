@@ -300,7 +300,7 @@ async function sendToGemini(userMsg) {
   if (!text) throw new Error('Resposta vazia da API.');
   return text;
 }
-async function handleSend()
+async function handleSend() {
   const raw = DOM.userInput.value.trim();
   if (!raw) return;
 
